@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:weather_app/src/features/weather/data/models/weather_model.dart';
 import 'package:weather_app/src/features/weather/data/weather_api_service.dart';
 
@@ -17,7 +18,8 @@ class _WeatherPageState extends State<WeatherPage> {
   @override
   void initState() {
     super.initState();
-    _fetchWeather();
+    // _fetchWeather();
+    _getCurrentLocation();
   }
 
   Future<void> _fetchWeather() async {
@@ -38,6 +40,43 @@ class _WeatherPageState extends State<WeatherPage> {
     });
   }
 
+  Future<void> _getCurrentLocation() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      setState(() {
+        _error = "Location services are disabled";
+        _isLoading = false;
+      });
+      return;
+    }
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        setState(() {
+          _error = "Location permission denied";
+          _isLoading = false;
+        });
+        return;
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      setState(() {
+        _error = "Location permission permanently denied";
+        _isLoading = false;
+      });
+      return;
+    }
+
+    Position position = await Geolocator.getCurrentPosition();
+    print("LAT: ${position.latitude}, LON: ${position.longitude}");
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,7 +90,10 @@ class _WeatherPageState extends State<WeatherPage> {
                 spacing: 100,
                 mainAxisAlignment: .center,
                 children: [
-                  Text("City: ${_weather!.cityName}", style: TextStyle(fontSize: 25)),
+                  Text(
+                    "City: ${_weather!.cityName}",
+                    style: TextStyle(fontSize: 25),
+                  ),
                   Text("${_weather!.temp}°C", style: TextStyle(fontSize: 45)),
                   SizedBox(height: 10),
                 ],
