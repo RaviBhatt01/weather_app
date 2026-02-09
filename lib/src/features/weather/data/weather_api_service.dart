@@ -8,7 +8,7 @@ class WeatherApiService {
   static const String _apiKey = 'f5322b33a229fa203be38ebe93a2c78f';
 
   // Making the function static to call it without creating an object
-  static Future<void> fetchWeather(String city) async {
+  static Future<Weather?> fetchWeather(String city) async {
     final Uri url = Uri.parse(
       'https://api.openweathermap.org/data/2.5/weather?q=$city&appid=$_apiKey&units=metric',
     );
@@ -23,9 +23,11 @@ class WeatherApiService {
       // print('Temperature in $city: $temp°C');
 
       final weather = Weather.fromJson(data);
-      print('Temperature in ${weather.cityName}: ${weather.temp}°C');
+      return weather; // return Weather object
+      // print('Temperature in ${weather.cityName}: ${weather.temp}°C');
     } else {
       print("Request failed with status: ${response.statusCode}");
+      return null; // return null if request fails
     }
   }
 }
