@@ -96,24 +96,42 @@ class _WeatherPageState extends State<WeatherPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Weather App"), centerTitle: true),
-      body: Center(
-        child: _isLoading
-            ? const CircularProgressIndicator()
-            : _error != null
-            ? Text(_error!)
-            : Column(
-                spacing: 100,
-                mainAxisAlignment: .center,
-                children: [
-                  Text(
-                    "City: ${_weather!.cityName}",
-                    style: TextStyle(fontSize: 25),
+      appBar: AppBar(
+        title: Text(
+          "Weather App",
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        ),
+        centerTitle: true,
+        backgroundColor: Colors.black,
+      ),
+      backgroundColor: Colors.black,
+      body: RefreshIndicator(
+        onRefresh: () => _getCurrentLocation(),
+        child: SingleChildScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          child: Center(
+            child: _isLoading
+                ? const CircularProgressIndicator()
+                : _error != null
+                ? Text(_error!)
+                : Column(
+                    spacing: 100,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(height: 100),
+                      Text(
+                        "City: ${_weather!.cityName}",
+                        style: TextStyle(fontSize: 25, color: Colors.white),
+                      ),
+                      Text(
+                        "${_weather!.temp}°C",
+                        style: TextStyle(fontSize: 45, color: Colors.white),
+                      ),
+                      SizedBox(height: 100),
+                    ],
                   ),
-                  Text("${_weather!.temp}°C", style: TextStyle(fontSize: 45)),
-                  SizedBox(height: 10),
-                ],
-              ),
+          ),
+        ),
       ),
     );
   }
