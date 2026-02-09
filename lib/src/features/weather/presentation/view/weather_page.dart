@@ -75,6 +75,22 @@ class _WeatherPageState extends State<WeatherPage> {
 
     Position position = await Geolocator.getCurrentPosition();
     print("LAT: ${position.latitude}, LON: ${position.longitude}");
+
+    // fetch weather using coordinates
+    Weather? weather = await WeatherApiService.fetchWeatherByLocation(
+      position.latitude,
+      position.longitude,
+    );
+
+    setState(() {
+      if (weather != null) {
+        _weather = weather;
+        _error = null;
+      } else {
+        _error = "Failed to load weather";
+      }
+      _isLoading = false;
+    });
   }
 
   @override

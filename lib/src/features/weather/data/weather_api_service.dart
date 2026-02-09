@@ -30,4 +30,20 @@ class WeatherApiService {
       return null; // return null if request fails
     }
   }
+
+  static Future<Weather?> fetchWeatherByLocation(double lat, double lon) async {
+    final Uri url = Uri.parse(
+      "https://api.openweathermap.org/data/2.5/weather?lat=$lat&lon=$lon&appid=$_apiKey&units=metric",
+    );
+
+    final response = await http.get(url);
+
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      return Weather.fromJson(data);
+    } else {
+      print("Request failed with status: ${response.statusCode}");
+      return null;
+    }
+  }
 }
