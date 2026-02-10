@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:weather_app/src/features/weather/cubit/cubit/weather_cubit.dart';
-import 'package:weather_app/src/features/weather/data/models/weather_model.dart';
-import 'package:weather_app/src/features/weather/data/weather_api_service.dart';
 
 class WeatherPage extends StatefulWidget {
   const WeatherPage({super.key});
@@ -39,12 +36,28 @@ class _WeatherPageState extends State<WeatherPage> {
               physics: const AlwaysScrollableScrollPhysics(),
               child: Center(
                 child: state is WeatherLoading
-                    ? Center(child: CircularProgressIndicator())
+                    ? Center(
+                        child: Column(
+                          children: [
+                            SizedBox(height: 200),
+                            CircularProgressIndicator(),
+                          ],
+                        ),
+                      )
                     : state is WeatherError
-                    ? Text(state.message)
+                    ? Column(
+                      mainAxisAlignment: .center,
+                      children: [
+                        SizedBox(height: 200),
+                        Text(
+                          state.message,
+                          style: TextStyle(color: Colors.white, fontSize: 20),
+                        ),
+                      ],
+                    )
                     : state is WeatherLoaded
                     ? Column(
-                        spacing: 100,
+                        spacing: 120,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           SizedBox(height: 100),
