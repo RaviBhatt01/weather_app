@@ -49,4 +49,6 @@ class Weather {
   /// Weather → represents the API data you care about
   /// fromJson → converts the API Map into a Weather object
   /// .toDouble() → ensures temperature is a double, even if API returns int
+  /// DateTime.fromMillisecondsSinceEpoch → converts UNIX timestamp to DateTime
+  /// * 1000 → converts seconds to milliseconds for DateTime
 }
