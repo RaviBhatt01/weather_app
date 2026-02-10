@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:weather_app/src/features/weather/cubit/cubit/weather_cubit.dart';
+import 'package:weather_app/src/features/weather/presentation/widgets/weather_detail.dart';
 
 class WeatherPage extends StatefulWidget {
   const WeatherPage({super.key});
@@ -131,12 +132,12 @@ class _WeatherPageState extends State<WeatherPage> {
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceAround,
                                   children: [
-                                    _buildWeatherDetail(
+                                    WeatherDetail(
                                       icon: Icons.water_drop,
                                       label: "Humidity",
                                       value: "${state.weather.humidity}%",
                                     ),
-                                    _buildWeatherDetail(
+                                    WeatherDetail(
                                       icon: Icons.air,
                                       label: "Wind",
                                       value: "${state.weather.windSpeed} m/s",
@@ -150,12 +151,12 @@ class _WeatherPageState extends State<WeatherPage> {
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceAround,
                                   children: [
-                                    _buildWeatherDetail(
+                                    WeatherDetail(
                                       icon: Icons.speed,
                                       label: "Pressure",
                                       value: "${state.weather.pressure} hPa",
                                     ),
-                                    _buildWeatherDetail(
+                                    WeatherDetail(
                                       icon: Icons.visibility,
                                       label: "Visibility",
                                       value:
@@ -170,13 +171,13 @@ class _WeatherPageState extends State<WeatherPage> {
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceAround,
                                   children: [
-                                    _buildWeatherDetail(
+                                    WeatherDetail(
                                       icon: Icons.wb_sunny_outlined,
                                       label: "Sunrise",
                                       value:
                                           "${state.weather.sunrise.hour}:${state.weather.sunrise.minute.toString().padLeft(2, '0')}",
                                     ),
-                                    _buildWeatherDetail(
+                                    WeatherDetail(
                                       icon: Icons.nightlight_round_outlined,
                                       label: "Sunset",
                                       value:
@@ -196,32 +197,6 @@ class _WeatherPageState extends State<WeatherPage> {
           },
         ),
       ),
-    );
-  }
-
-  Widget _buildWeatherDetail({
-    required IconData icon,
-    required String label,
-    required String value,
-  }) {
-    return Column(
-      children: [
-        Icon(icon, color: Colors.white70, size: 30),
-        const SizedBox(height: 8),
-        Text(
-          label,
-          style: const TextStyle(color: Colors.white60, fontSize: 14),
-        ),
-        const SizedBox(height: 4),
-        Text(
-          value,
-          style: const TextStyle(
-            color: Colors.white,
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ],
     );
   }
 }
