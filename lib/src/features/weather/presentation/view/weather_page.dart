@@ -111,7 +111,7 @@ class _WeatherPageState extends State<WeatherPage> {
           physics: const AlwaysScrollableScrollPhysics(),
           child: Center(
             child: _isLoading
-                ? const CircularProgressIndicator()
+                ? Center(child: CircularProgressIndicator())
                 : _error != null
                 ? Text(_error!)
                 : Column(
@@ -119,9 +119,18 @@ class _WeatherPageState extends State<WeatherPage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       SizedBox(height: 100),
-                      Text(
-                        "City: ${_weather!.cityName}",
-                        style: TextStyle(fontSize: 25, color: Colors.white),
+                      Column(
+                        children: [
+                          Icon(
+                            Icons.location_on_rounded,
+                            color: Colors.white60,
+                            size: 30,
+                          ),
+                          Text(
+                            _weather!.cityName,
+                            style: TextStyle(fontSize: 25, color: Colors.white),
+                          ),
+                        ],
                       ),
                       Text(
                         "${_weather!.temp}°C",
