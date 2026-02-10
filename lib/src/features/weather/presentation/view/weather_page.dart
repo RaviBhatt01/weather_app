@@ -21,7 +21,7 @@ class _WeatherPageState extends State<WeatherPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "Weather App",
+          "Weather Forecast",
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
@@ -46,42 +46,148 @@ class _WeatherPageState extends State<WeatherPage> {
                       )
                     : state is WeatherError
                     ? Column(
-                      mainAxisAlignment: .center,
-                      children: [
-                        SizedBox(height: 200),
-                        Text(
-                          state.message,
-                          style: TextStyle(color: Colors.white, fontSize: 20),
-                        ),
-                      ],
-                    )
+                        mainAxisAlignment: .center,
+                        children: [
+                          SizedBox(height: 200),
+                          Text(
+                            state.message,
+                            style: TextStyle(color: Colors.white, fontSize: 20),
+                          ),
+                        ],
+                      )
                     : state is WeatherLoaded
                     ? Column(
-                        spacing: 120,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          SizedBox(height: 100),
+                          const SizedBox(height: 50),
                           Column(
                             children: [
-                              Icon(
+                              const Icon(
                                 Icons.location_on_rounded,
                                 color: Colors.white60,
                                 size: 30,
                               ),
                               Text(
                                 state.weather.cityName,
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontSize: 25,
                                   color: Colors.white,
+                                  fontWeight: FontWeight.bold,
                                 ),
                               ),
                             ],
                           ),
+                          const SizedBox(height: 20),
+                          // Weather Icon
+                          if (state.weather.icon.isNotEmpty)
+                            Image.network(
+                              'https://openweathermap.org/img/wn/${state.weather.icon}@4x.png',
+                              width: 150,
+                              height: 150,
+                              errorBuilder: (context, error, stackTrace) {
+                                return const Icon(
+                                  Icons.cloud,
+                                  size: 100,
+                                  color: Colors.white,
+                                );
+                              },
+                            ),
                           Text(
-                            "${state.weather.temp}°C",
-                            style: TextStyle(fontSize: 45, color: Colors.white),
+                            "${state.weather.temp.round()}°C",
+                            style: const TextStyle(
+                              fontSize: 60,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w300,
+                            ),
                           ),
-                          SizedBox(height: 100),
+                          Text(
+                            state.weather.weatherCondition,
+                            style: const TextStyle(
+                              fontSize: 20,
+                              color: Colors.white70,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          const SizedBox(height: 5),
+                          Text(
+                            "Feels like ${state.weather.feelsLike.round()}°C",
+                            style: const TextStyle(
+                              fontSize: 16,
+                              color: Colors.white54,
+                            ),
+                          ),
+                          const SizedBox(height: 40),
+                          // Additional Data Row
+                          Container(
+                            margin: const EdgeInsets.symmetric(horizontal: 20),
+                            padding: const EdgeInsets.all(20),
+                            decoration: BoxDecoration(
+                              color: Colors.white.withOpacity(0.1),
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: Column(
+                              children: [
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
+                                  children: [
+                                    _buildWeatherDetail(
+                                      icon: Icons.water_drop,
+                                      label: "Humidity",
+                                      value: "${state.weather.humidity}%",
+                                    ),
+                                    _buildWeatherDetail(
+                                      icon: Icons.air,
+                                      label: "Wind",
+                                      value: "${state.weather.windSpeed} m/s",
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 20),
+                                const Divider(color: Colors.white24),
+                                const SizedBox(height: 20),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
+                                  children: [
+                                    _buildWeatherDetail(
+                                      icon: Icons.speed,
+                                      label: "Pressure",
+                                      value: "${state.weather.pressure} hPa",
+                                    ),
+                                    _buildWeatherDetail(
+                                      icon: Icons.visibility,
+                                      label: "Visibility",
+                                      value:
+                                          "${(state.weather.visibility / 1000).toStringAsFixed(1)} km",
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 20),
+                                const Divider(color: Colors.white24),
+                                const SizedBox(height: 20),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
+                                  children: [
+                                    _buildWeatherDetail(
+                                      icon: Icons.wb_sunny_outlined,
+                                      label: "Sunrise",
+                                      value:
+                                          "${state.weather.sunrise.hour}:${state.weather.sunrise.minute.toString().padLeft(2, '0')}",
+                                    ),
+                                    _buildWeatherDetail(
+                                      icon: Icons.nightlight_round_outlined,
+                                      label: "Sunset",
+                                      value:
+                                          "${state.weather.sunset.hour}:${state.weather.sunset.minute.toString().padLeft(2, '0')}",
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(height: 50),
                         ],
                       )
                     : SizedBox.shrink(),
@@ -90,6 +196,32 @@ class _WeatherPageState extends State<WeatherPage> {
           },
         ),
       ),
+    );
+  }
+
+  Widget _buildWeatherDetail({
+    required IconData icon,
+    required String label,
+    required String value,
+  }) {
+    return Column(
+      children: [
+        Icon(icon, color: Colors.white70, size: 30),
+        const SizedBox(height: 8),
+        Text(
+          label,
+          style: const TextStyle(color: Colors.white60, fontSize: 14),
+        ),
+        const SizedBox(height: 4),
+        Text(
+          value,
+          style: const TextStyle(
+            color: Colors.white,
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ],
     );
   }
 }
