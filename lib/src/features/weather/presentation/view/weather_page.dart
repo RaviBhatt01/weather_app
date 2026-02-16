@@ -45,16 +45,7 @@ class _WeatherPageState extends State<WeatherPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      extendBodyBehindAppBar: true,
-      appBar: AppBar(
-        title: const Text(
-          "Weather Forecast",
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-        ),
-        centerTitle: true,
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-      ),
+      // extendBodyBehindAppBar: true,
       body: RefreshIndicator(
         onRefresh: () => context.read<WeatherCubit>().fetchWeatherByLocation(),
         child: Container(
@@ -71,7 +62,7 @@ class _WeatherPageState extends State<WeatherPage> {
               return SingleChildScrollView(
                 physics: const AlwaysScrollableScrollPhysics(),
                 child: Padding(
-                  padding: const EdgeInsets.fromLTRB(16, 100, 16, 24),
+                  padding: const EdgeInsets.fromLTRB(16, 70, 16, 24),
                   child: Center(
                     child: state is WeatherLoading
                         ? _buildLoading()
@@ -140,15 +131,25 @@ class _WeatherPageState extends State<WeatherPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    weather.cityName,
-                    style: const TextStyle(
-                      fontSize: 28,
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                    ),
+                  Row(
+                    spacing: 8,
+                    children: [
+                      Text(
+                        weather.cityName,
+                        style: const TextStyle(
+                          fontSize: 28,
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const Icon(
+                        Icons.location_on_rounded,
+                        color: Colors.white70,
+                        size: 28,
+                      ),
+                    ],
                   ),
-                  const SizedBox(height: 8),
+                  const SizedBox(height: 10),
                   Text(
                     _formattedNow(),
                     style: const TextStyle(fontSize: 14, color: Colors.white70),
@@ -156,15 +157,9 @@ class _WeatherPageState extends State<WeatherPage> {
                 ],
               ),
             ),
-            const SizedBox(width: 16),
-            const Icon(
-              Icons.location_on_rounded,
-              color: Colors.white70,
-              size: 28,
-            ),
           ],
         ),
-        const SizedBox(height: 24),
+        const SizedBox(height: 36),
         Container(
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
